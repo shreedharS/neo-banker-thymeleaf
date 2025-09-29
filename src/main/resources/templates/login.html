@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Login | Neo Bank</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Updated Color Palette using CSS Variables */
+        :root {
+            --primary-color: #0A3D62;      /* Dark Navy Blue */
+            --accent-color: #1EAE98;       /* Teal */
+            --bg-color: #F8F9FA;           /* Light Gray */
+            --surface-color: #FFFFFF;      /* White for cards, navbar */
+            --text-color: #212529;         /* Dark Charcoal */
+            --text-muted-color: #6c757d;   /* Muted Gray */
+            --border-color: #dee2e6;       /* Light Gray Border */
+            --danger-color: #dc3545;       /* Standard Red */
+            --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            background: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-custom .navbar-brand {
+            font-weight: 800;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+
+        .navbar-custom .social-icons a {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+            margin-left: 15px;
+            font-size: 1.2rem;
+        }
+
+        .navbar-custom .social-icons a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Login Container */
+        .login-container {
+            max-width: 420px;
+            width: 100%;
+            padding: 2.5rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .login-container h2 {
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            height: auto;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(30, 174, 152, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted-color);
+        }
+
+        /* Button */
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid var(--primary-color);
+            background: var(--primary-color);
+            color: var(--surface-color);
+        }
+
+        .btn-submit:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--surface-color);
+        }
+
+        /* Links and misc */
+        .custom-link {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .custom-link:hover {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .sub-text {
+            color: var(--text-muted-color);
+        }
+
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+            border-radius: 8px;
+        }
+
+        /* Show password checkbox */
+        .form-check-label {
+            color: var(--text-muted-color);
+            font-size: 0.9rem;
+        }
+        .form-check-input{
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-color);
+            color: var(--text-muted-color);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem 0;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <a class="navbar-brand" href="#">
+        <i class="fas fa-university"></i>
+        Neo Bank
+    </a>
+    <div class="ml-auto social-icons">
+        <a href="https://github.com/shreedharS" target="_blank" title="GitHub">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/shreedharsk/" target="_blank" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+        </a>
+    </div>
+</nav>
+
+<div class="login-container">
+    <h2 class="text-center">Welcome Back</h2>
+    <form method="post" action="/login">
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" required/>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required/>
+        </div>
+        <div class="form-group form-check text-left">
+            <input type="checkbox" class="form-check-input" id="check-pwd" onclick="togglePasswordVisibility()">
+            <label class="form-check-label" for="check-pwd">Show Password</label>
+        </div>
+        <button type="submit" class="btn btn-submit btn-block">Login</button>
+    </form>
+    <p class="text-center mt-4 sub-text">Don't have an account? <a href="/register" class="custom-link">Register here</a></p>
+
+    <div th:if="${param.error}" class="alert alert-danger mt-3 text-center">
+        Invalid username or password.
+    </div>
+</div>
+
+<footer class="footer fixed-bottom">
+    <p class="mb-0">&copy; 2025 Neo Bank | Spring Boot Project </p>
+</footer>
+
+<script>
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById("password");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+        } else {
+            passwordField.type = "password";
+        }
+    }
+</script>
+</body>
+</html>

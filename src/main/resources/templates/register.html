@@ -1,0 +1,290 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Register | Neo Bank</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0A3D62;      /* Dark Navy Blue */
+            --accent-color: #1EAE98;       /* Teal */
+            --bg-color: #F8F9FA;           /* Light Gray */
+            --surface-color: #FFFFFF;      /* White for cards, navbar */
+            --text-color: #212529;         /* Dark Charcoal */
+            --text-muted-color: #6c757d;   /* Muted Gray */
+            --border-color: #dee2e6;       /* Light Gray Border */
+            --danger-color: #dc3545;       /* Standard Red */
+            --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding-top: 80px; padding-bottom: 80px; }
+        .navbar-custom { background: var(--surface-color); border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow); }
+        .navbar-custom .navbar-brand { font-weight: 800; color: var(--primary-color) !important; font-size: 1.5rem; }
+        .navbar-custom .social-icons a { color: var(--text-color); transition: color 0.3s ease; margin-left: 15px; font-size: 1.2rem; }
+        .navbar-custom .social-icons a:hover { color: var(--accent-color); }
+        .register-container { max-width: 420px; width: 100%; padding: 2.5rem; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: var(--shadow); text-align: center; }
+        .register-container h2 { font-weight: 800; color: var(--primary-color); margin-bottom: 2rem; font-size: 2.5rem; }
+        .form-group { margin-bottom: 1.5rem; text-align: left;}
+        .form-control { background-color: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; padding: 0.8rem 1rem; height: auto; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .form-control:focus { background-color: var(--surface-color); color: var(--text-color); border-color: var(--accent-color); box-shadow: 0 0 0 0.2rem rgba(30, 174, 152, 0.25); }
+        .form-control::placeholder { color: var(--text-muted-color); }
+        .btn-submit { display: block; width: 100%; padding: 0.8rem 2rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease; border: 1px solid var(--primary-color); background: var(--primary-color); color: var(--surface-color); }
+        .btn-submit:hover { background: var(--accent-color); border-color: var(--accent-color); color: var(--surface-color); }
+        .custom-link { color: var(--accent-color); font-weight: 600; text-decoration: none; transition: color 0.3s ease; }
+        .custom-link:hover { color: var(--primary-color); text-decoration: none; }
+        .sub-text { color: var(--text-muted-color); }
+        .alert-danger { background-color: rgba(220, 53, 69, 0.1); color: var(--danger-color); border: 1px solid var(--danger-color); border-radius: 8px; }
+        .form-check-label { color: var(--text-muted-color); font-size: 0.9rem; }
+        .form-check-input{ cursor: pointer; }
+        .footer { background: var(--bg-color); color: var(--text-muted-color); border-top: 1px solid var(--border-color); padding: 1rem 0; font-size: 0.9rem; text-align: center; }
+        /* Validation Feedback Styles */
+        .invalid-feedback { display: none; width: 100%; margin-top: .25rem; font-size: 80%; color: var(--danger-color); }
+        .was-validated .form-control:invalid, .form-control.is-invalid { border-color: var(--danger-color); }
+        .was-validated .form-control:invalid ~ .invalid-feedback, .form-control.is-invalid ~ .invalid-feedback { display: block; }
+        .was-validated .form-check-input:invalid ~ .form-check-label { color: var(--danger-color); }
+        .was-validated .form-check-input:invalid ~ .invalid-feedback { display: block; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <a class="navbar-brand" href="#">
+        <i class="fas fa-university"></i> Neo Bank
+    </a>
+    <div class="ml-auto social-icons">
+        <a href="https://github.com/shreedharS" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/shreedharsk/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+    </div>
+</nav>
+
+<div class="register-container">
+    <h2 class="text-center">Create Account</h2>
+    <form id="registerForm" method="post" action="/register" novalidate>
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" id="username" placeholder="Choose a Username" required minlength="3">
+            <div class="invalid-feedback">Username must be at least 3 characters.</div>
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Enter your Email" required>
+            <div class="invalid-feedback">Please enter a valid email address.</div>
+        </div>
+        <div class="form-group">
+            <input type="tel" class="form-control" name="mobile" id="mobile" placeholder="Enter Mobile Number" required pattern="^\d{10}$">
+            <div class="invalid-feedback">Mobile number must be exactly 10 digits.</div>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Create a Secure Password" required minlength="8">
+            <div class="invalid-feedback">Password must be at least 8 characters.</div>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Your Password" required>
+            <div class="invalid-feedback">Passwords do not match.</div>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="check-pwd" onclick="togglePasswordVisibility()">
+            <label class="form-check-label" for="check-pwd">Show Passwords</label>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="terms" required>
+            <label class="form-check-label" for="terms">I agree to the <a href="/terms" class="custom-link">Terms and Conditions</a></label>
+            <div class="invalid-feedback">You must agree to the terms and conditions.</div>
+        </div>
+        <button type="submit" class="btn btn-submit btn-block mt-4">Register</button>
+    </form>
+    <p class="text-center mt-4 sub-text">Already have an account? <a href="/login" class="custom-link">Login here</a></p>
+    <div th:if="${error}" class="alert alert-danger mt-3 text-center" th:text="${error}"></div>
+</div>
+
+<footer class="footer fixed-bottom">
+    <p class="mb-0">&copy; 2025 Neo Bank | Spring Boot Project</p>
+</footer>
+
+<script>
+    // Toggles visibility for both password fields
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById("password");
+        const confirmPasswordField = document.getElementById("confirmPassword");
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+        confirmPasswordField.type = type;
+    }
+
+    // Handles form submission and validation feedback
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        const confirmPassword = document.getElementById('confirmPassword');
+        confirmPassword.classList.remove('is-invalid'); // Reset custom error
+        let isFormValid = true;
+
+        // 1. Check if passwords match
+        if (document.getElementById('password').value !== confirmPassword.value) {
+            confirmPassword.classList.add('is-invalid');
+            isFormValid = false;
+        }
+
+        // 2. Check native HTML5 validation for other fields
+        if (!this.checkValidity()) {
+            isFormValid = false;
+        }
+
+        // 3. If anything is invalid, prevent form submission
+        if (!isFormValid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        this.classList.add('was-validated');
+    }, false);
+</script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Register | Neo Bank</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0A3D62;      /* Dark Navy Blue */
+            --accent-color: #1EAE98;       /* Teal */
+            --bg-color: #F8F9FA;           /* Light Gray */
+            --surface-color: #FFFFFF;      /* White for cards, navbar */
+            --text-color: #212529;         /* Dark Charcoal */
+            --text-muted-color: #6c757d;   /* Muted Gray */
+            --border-color: #dee2e6;       /* Light Gray Border */
+            --danger-color: #dc3545;       /* Standard Red */
+            --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding-top: 80px; padding-bottom: 80px; }
+        .navbar-custom { background: var(--surface-color); border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow); }
+        .navbar-custom .navbar-brand { font-weight: 800; color: var(--primary-color) !important; font-size: 1.5rem; }
+        .navbar-custom .social-icons a { color: var(--text-color); transition: color 0.3s ease; margin-left: 15px; font-size: 1.2rem; }
+        .navbar-custom .social-icons a:hover { color: var(--accent-color); }
+        .register-container { max-width: 420px; width: 100%; padding: 2.5rem; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: var(--shadow); text-align: center; }
+        .register-container h2 { font-weight: 800; color: var(--primary-color); margin-bottom: 2rem; font-size: 2.5rem; }
+        .form-group { margin-bottom: 1.5rem; text-align: left;}
+        .form-control { background-color: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; padding: 0.8rem 1rem; height: auto; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .form-control:focus { background-color: var(--surface-color); color: var(--text-color); border-color: var(--accent-color); box-shadow: 0 0 0 0.2rem rgba(30, 174, 152, 0.25); }
+        .form-control::placeholder { color: var(--text-muted-color); }
+        .btn-submit { display: block; width: 100%; padding: 0.8rem 2rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease; border: 1px solid var(--primary-color); background: var(--primary-color); color: var(--surface-color); }
+        .btn-submit:hover { background: var(--accent-color); border-color: var(--accent-color); color: var(--surface-color); }
+        .custom-link { color: var(--accent-color); font-weight: 600; text-decoration: none; transition: color 0.3s ease; }
+        .custom-link:hover { color: var(--primary-color); text-decoration: none; }
+        .sub-text { color: var(--text-muted-color); }
+        .alert-danger { background-color: rgba(220, 53, 69, 0.1); color: var(--danger-color); border: 1px solid var(--danger-color); border-radius: 8px; }
+        .form-check-label { color: var(--text-muted-color); font-size: 0.9rem; }
+        .form-check-input{ cursor: pointer; }
+        .footer { background: var(--bg-color); color: var(--text-muted-color); border-top: 1px solid var(--border-color); padding: 1rem 0; font-size: 0.9rem; text-align: center; }
+        /* Validation Feedback Styles */
+        .invalid-feedback { display: none; width: 100%; margin-top: .25rem; font-size: 80%; color: var(--danger-color); }
+        .was-validated .form-control:invalid, .form-control.is-invalid { border-color: var(--danger-color); }
+        .was-validated .form-control:invalid ~ .invalid-feedback, .form-control.is-invalid ~ .invalid-feedback { display: block; }
+        .was-validated .form-check-input:invalid ~ .form-check-label { color: var(--danger-color); }
+        .was-validated .form-check-input:invalid ~ .invalid-feedback { display: block; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <a class="navbar-brand" href="#">
+        <i class="fas fa-university"></i> Neo Bank
+    </a>
+    <div class="ml-auto social-icons">
+        <a href="https://github.com/shreedharS" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/shreedharsk/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+    </div>
+</nav>
+
+<div class="register-container">
+    <h2 class="text-center">Create Account</h2>
+    <form id="registerForm" method="post" action="/register" novalidate>
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" id="username" placeholder="Choose a Username" required minlength="3">
+            <div class="invalid-feedback">Username must be at least 3 characters.</div>
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Enter your Email" required>
+            <div class="invalid-feedback">Please enter a valid email address.</div>
+        </div>
+        <div class="form-group">
+            <input type="tel" class="form-control" name="mobile" id="mobile" placeholder="Enter Mobile Number" required pattern="^\d{10}$">
+            <div class="invalid-feedback">Mobile number must be exactly 10 digits.</div>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Create a Secure Password" required
+                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                   title="Password must be more than 8 characters, with one uppercase, one lowercase, one number, and one special character.">
+            <div class="invalid-feedback">
+                Password must be 8+ characters and include an uppercase, lowercase, number, and special character (@$!%*?&).
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Your Password" required>
+            <div class="invalid-feedback">Passwords do not match.</div>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="check-pwd" onclick="togglePasswordVisibility()">
+            <label class="form-check-label" for="check-pwd">Show Passwords</label>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="terms" required>
+            <label class="form-check-label" for="terms">I agree to the <a href="/terms" class="custom-link">Terms and Conditions</a></label>
+            <div class="invalid-feedback">You must agree to the terms and conditions.</div>
+        </div>
+        <button type="submit" class="btn btn-submit btn-block mt-4">Register</button>
+    </form>
+    <p class="text-center mt-4 sub-text">Already have an account? <a href="/login" class="custom-link">Login here</a></p>
+    <div th:if="${error}" class="alert alert-danger mt-3 text-center" th:text="${error}"></div>
+</div>
+
+<footer class="footer fixed-bottom">
+    <p class="mb-0">&copy; 2025 Neo Bank | Spring Boot Project</p>
+</footer>
+
+<script>
+    // Toggles visibility for both password fields
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById("password");
+        const confirmPasswordField = document.getElementById("confirmPassword");
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+        confirmPasswordField.type = type;
+    }
+
+    // Handles form submission and validation feedback
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        const confirmPassword = document.getElementById('confirmPassword');
+        confirmPassword.classList.remove('is-invalid'); // Reset custom error
+        let isFormValid = true;
+
+        // 1. Check if passwords match
+        if (document.getElementById('password').value !== confirmPassword.value) {
+            confirmPassword.classList.add('is-invalid');
+            isFormValid = false;
+        }
+
+        // 2. Check native HTML5 validation for other fields
+        if (!this.checkValidity()) {
+            isFormValid = false;
+        }
+
+        // 3. If anything is invalid, prevent form submission
+        if (!isFormValid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        this.classList.add('was-validated');
+    }, false);
+</script>
+</body>
+</html>

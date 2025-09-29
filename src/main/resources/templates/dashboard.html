@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard | Neo Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Updated Color Palette using CSS Variables */
+        :root {
+            --primary-color: #0A3D62;      /* Dark Navy Blue */
+            --accent-color: #1EAE98;       /* Teal */
+            --bg-color: #F8F9FA;           /* Light Gray */
+            --surface-color: #FFFFFF;      /* White for cards, etc. */
+            --text-color: #212529;         /* Dark Charcoal */
+            --text-muted-color: #6c757d;   /* Muted Gray */
+            --border-color: #dee2e6;       /* Light Gray Border */
+            --success-color: #198754;      /* Bootstrap Success Green */
+            --danger-color: #dc3545;       /* Bootstrap Danger Red */
+            --gradient-primary: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.075);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--primary-color);
+            font-size: 1.75rem;
+        }
+        .navbar-brand i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            color: var(--text-muted-color);
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+            border-radius: 8px;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+        .navbar-toggler {
+            border-color: var(--border-color);
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(10, 61, 98, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Dashboard */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        .welcome-section {
+            background: var(--surface-color);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+        .welcome-title {
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        .welcome-title span {
+            color: var(--primary-color);
+        }
+        .balance-card {
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 8px 25px rgba(10, 61, 98, 0.2);
+        }
+        .balance-title {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        .balance-amount {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        .account-details {
+            background: transparent;
+            border-radius: 12px;
+            padding: 1.5rem 0;
+            margin: 1rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+        .account-details h5 {
+            color: var(--text-color);
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 500;
+            color: var(--text-muted-color);
+        }
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Action Cards */
+        .action-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            box-shadow: var(--shadow);
+        }
+        .action-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 1rem 1.5rem rgba(0,0,0,0.1);
+        }
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        .action-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .text-muted {
+          color: var(--text-muted-color) !important;
+        }
+        .btn-action {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-action:hover {
+            background: var(--primary-color);
+            color: var(--surface-color);
+        }
+
+        /* Forms */
+        .form-container {
+            margin-top: 1.5rem;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .form-control::placeholder {
+            color: var(--text-muted-color);
+        }
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(30, 174, 152, 0.25);
+            background-color: var(--surface-color);
+            color: var(--text-color);
+        }
+        .form-label {
+            color: var(--text-muted-color);
+        }
+        .btn-submit {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        .btn-submit:hover {
+            background-color: #168a79; /* Darker Teal */
+            transform: translateY(-2px);
+        }
+
+        /* Alerts & Footer */
+        .alert-message {
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0 0;
+            font-weight: 500;
+        }
+        .error {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+            border-left: 4px solid var(--danger-color);
+        }
+        .success {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: var(--success-color);
+            border-left: 4px solid var(--success-color);
+        }
+        .footer {
+            background: var(--surface-color);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+        .footer-links a {
+            color: var(--text-muted-color);
+            text-decoration: none;
+            margin: 0 0.75rem;
+            transition: color 0.2s ease;
+        }
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        .copyright {
+            color: var(--text-muted-color);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+            .balance-amount {
+                font-size: 1.8rem;
+            }
+            .action-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-university"></i>
+            Neo Bank
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard"><i class="fas fa-home me-1"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/transactions"><i class="fas fa-exchange-alt me-1"></i> Transactions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-container">
+    <div class="welcome-section">
+        <h1 class="welcome-title">Welcome back, <span th:text="${account.username}">User</span></h1>
+        <p class="text-muted">Here's your current financial overview</p>
+        
+        <div class="balance-card">
+            <p class="balance-title">Available Balance</p>
+            <h2 class="balance-amount" th:text="'$' + ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')}"></h2>
+        </div>
+        
+        <div class="account-details">
+            <h5 class="mb-3">Account Details</h5>
+            <div class="detail-item">
+                <span class="detail-label">Account Number</span>
+                <span class="detail-value" th:text="${account.id}"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Account Type</span>
+                <span class="detail-value">Savings</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Member Since</span>
+                <span class="detail-value">January 2025</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="action-card text-center">
+                <div class="action-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <h5 class="action-title">Deposit Funds</h5>
+                <p class="text-muted mb-3">Add money to your account</p>
+                <button class="btn btn-action" type="button" data-bs-toggle="collapse" data-bs-target="#depositForm">
+                    Deposit Now
+                </button>
+                <div class="collapse mt-3" id="depositForm">
+                    <form method="post" action="/deposit" class="form-container text-start">
+                        <div class="mb-3">
+                            <label class="form-label">Amount</label>
+                            <input type="number" step="0.01" class="form-control" name="amount" placeholder="0.00" required>
+                        </div>
+                        <button type="submit" class="btn btn-submit">
+                            <i class="fas fa-arrow-circle-down me-2"></i> Confirm Deposit
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="action-card text-center">
+                <div class="action-icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <h5 class="action-title">Withdraw Funds</h5>
+                <p class="text-muted mb-3">Take out money from your account</p>
+                <button class="btn btn-action" type="button" data-bs-toggle="collapse" data-bs-target="#withdrawForm">
+                    Withdraw Now
+                </button>
+                <div class="collapse mt-3" id="withdrawForm">
+                    <form method="post" action="/withdraw" class="form-container text-start">
+                        <div class="mb-3">
+                            <label class="form-label">Amount</label>
+                            <input type="number" step="0.01" class="form-control" name="amount" placeholder="0.00" required>
+                        </div>
+                        <button type="submit" class="btn btn-submit">
+                            <i class="fas fa-arrow-circle-up me-2"></i> Confirm Withdrawal
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-12">
+            <div class="action-card text-center">
+                <div class="action-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <h5 class="action-title">Transfer Money</h5>
+                <p class="text-muted mb-3">Send money to another account</p>
+                <button class="btn btn-action" type="button" data-bs-toggle="collapse" data-bs-target="#transferForm">
+                    Transfer Now
+                </button>
+                <div class="collapse mt-3" id="transferForm">
+                    <form method="post" action="/transfer" class="form-container text-start">
+                        <div class="mb-3">
+                            <label class="form-label">Recipient Username</label>
+                            <input type="text" class="form-control" name="toUsername" placeholder="Enter username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Amount</label>
+                            <input type="number" step="0.01" class="form-control" name="amount" placeholder="0.00" required>
+                        </div>
+                        <button type="submit" class="btn btn-submit">
+                            <i class="fas fa-exchange-alt me-2"></i> Confirm Transfer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:if="${param.error}" class="alert-message error">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <span th:text="${param.error}"></span>
+    </div>
+    <div th:if="${param.success}" class="alert-message success">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${param.success}"></span>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="d-flex justify-content-center footer-links mb-2">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Security</a>
+            <a href="#">Contact Us</a>
+        </div>
+        <div class="text-center copyright">
+            &copy; 2025 Neo Bank. All rights reserved. | Spring Boot Project
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
